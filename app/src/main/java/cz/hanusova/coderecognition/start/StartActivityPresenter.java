@@ -18,4 +18,8 @@ public class StartActivityPresenter implements BasePresenter<StartActivityView>{
     public void onDetach() {
         this.view = null;
     }
+
+    public void recognizeCodes(){
+        //TODO: tady pridej algoritmy pro rozpoznavani sifer. Potom to muzeme refactorovat :)
+    }
 }
