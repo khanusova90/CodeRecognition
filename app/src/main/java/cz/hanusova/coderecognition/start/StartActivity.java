@@ -45,6 +45,6 @@ public class StartActivity extends AppCompatActivity implements StartActivityVie
     }
 
     private void changeText(){
-        scannedText.setText("Changed text");
+        scannedText.setText(presenter.getText());
     }
 }

@@ -18,4 +18,8 @@ public class StartActivityPresenter implements BasePresenter<StartActivityView>{
     public void onDetach() {
         this.view = null;
     }
+
+    public String getText(){
+        return "Hello, I'm your presenter!";
+    }
 }
