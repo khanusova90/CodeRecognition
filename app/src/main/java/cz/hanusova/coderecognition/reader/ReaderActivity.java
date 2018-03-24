@@ -20,6 +20,7 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -31,7 +32,12 @@ import com.google.android.gms.vision.text.TextRecognizer;
 
 import java.io.IOException;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.Unbinder;
 import cz.hanusova.coderecognition.R;
+import cz.hanusova.coderecognition.util.Constants;
 import cz.hanusova.coderecognition.view.CameraSourcePreview;
 import cz.hanusova.coderecognition.view.GraphicOverlay;
 import cz.hanusova.coderecognition.view.OcrGraphic;
@@ -55,6 +61,9 @@ public class ReaderActivity extends AppCompatActivity {
     public static final String UseFlash = "UseFlash";
     public static final String TextBlockObject = "String";
 
+    @BindView(R.id.capture_text)
+    Button captureText;
+
     private CameraSource mCameraSource;
     private CameraSourcePreview mPreview;
     private GraphicOverlay<OcrGraphic> mGraphicOverlay;
@@ -63,6 +72,8 @@ public class ReaderActivity extends AppCompatActivity {
     private ScaleGestureDetector scaleGestureDetector;
     private GestureDetector gestureDetector;
 
+    private Unbinder unbinder;
+
     /**
      * Initializes the UI and creates the detector pipeline.
      */
@@ -70,9 +81,10 @@ public class ReaderActivity extends AppCompatActivity {
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
         setContentView(R.layout.capture_preview);
+        unbinder = ButterKnife.bind(this);
 
-        mPreview = (CameraSourcePreview) findViewById(R.id.preview);
-        mGraphicOverlay = (GraphicOverlay<OcrGraphic>) findViewById(R.id.graphicOverlay);
+        mPreview = findViewById(R.id.preview);
+        mGraphicOverlay = findViewById(R.id.graphicOverlay);
 
         // read parameters from the intent used to launch the activity.
         boolean autoFocus = getIntent().getBooleanExtra(AutoFocus, false);
@@ -94,6 +106,15 @@ public class ReaderActivity extends AppCompatActivity {
         Snackbar.make(mGraphicOverlay, "Tap to capture. Pinch/Stretch to zoom",
                 Snackbar.LENGTH_LONG)
                 .show();
+    }
+
+    @OnClick(R.id.capture_text)
+    void captureText(){
+        //TODO: get text from layout
+        Intent intent = new Intent();
+        intent.putExtra(Constants.EXTRA_TEXT, "Captured text");
+        setResult(Activity.RESULT_OK, intent);
+        finish();
     }
 
     /**
