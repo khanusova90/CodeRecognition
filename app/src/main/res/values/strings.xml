@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">CodeRecognition</string>
+
+    <string name="ok">OK</string>
+
+    <!--Errors-->
+    <string name="no_camera_permission">Aplikace potřebuje povolení k fotoaparátu.</string>
+    <string name="low_storage_error">V uložišti je příliš málo místa</string>
+
+    <!--Permissions-->
+    <string name="permission_camera_rationale">Pro chod aplikace je potřeba přístup k fotoaparátu</string>
 </resources>

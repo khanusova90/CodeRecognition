@@ -1,16 +1,20 @@
 package cz.hanusova.coderecognition.start;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.Button;
 import android.widget.EditText;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 import cz.hanusova.coderecognition.R;
+import cz.hanusova.coderecognition.reader.ReaderActivity;
 import dagger.android.AndroidInjection;
 
 /**
@@ -24,6 +28,8 @@ public class StartActivity extends AppCompatActivity implements StartActivityVie
 
     @BindView(R.id.scanned_text)
     EditText scannedText;
+    @BindView(R.id.start_scan)
+    Button startScan;
 
     private Unbinder unbinder;
 
@@ -42,6 +48,12 @@ public class StartActivity extends AppCompatActivity implements StartActivityVie
             unbinder.unbind();
         }
         super.onDestroy();
+    }
+
+    @OnClick(R.id.start_scan)
+    void startScan(){
+        Intent intent = new Intent(this, ReaderActivity.class);
+        startActivity(intent);
     }
 
     private void changeText(){
