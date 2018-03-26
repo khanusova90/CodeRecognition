@@ -6,12 +6,6 @@
     android:layout_height="match_parent"
     android:keepScreenOn="true">
 
-    <Button
-        android:id="@+id/capture_text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Vyhodnotit text"/>
-
     <cz.hanusova.coderecognition.view.CameraSourcePreview
         android:id="@+id/preview"
         android:layout_width="match_parent"

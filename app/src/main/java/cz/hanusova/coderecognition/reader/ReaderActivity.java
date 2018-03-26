@@ -20,21 +20,17 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.text.TextBlock;
 import com.google.android.gms.vision.text.TextRecognizer;
 
 import java.io.IOException;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import butterknife.Unbinder;
 import cz.hanusova.coderecognition.R;
 import cz.hanusova.coderecognition.util.Constants;
@@ -61,9 +57,6 @@ public class ReaderActivity extends AppCompatActivity {
     public static final String UseFlash = "UseFlash";
     public static final String TextBlockObject = "String";
 
-    @BindView(R.id.capture_text)
-    Button captureText;
-
     private CameraSource mCameraSource;
     private CameraSourcePreview mPreview;
     private GraphicOverlay<OcrGraphic> mGraphicOverlay;
@@ -87,7 +80,8 @@ public class ReaderActivity extends AppCompatActivity {
         mGraphicOverlay = findViewById(R.id.graphicOverlay);
 
         // read parameters from the intent used to launch the activity.
-        boolean autoFocus = getIntent().getBooleanExtra(AutoFocus, false);
+        //TODO: autofocus a blesk
+        boolean autoFocus = getIntent().getBooleanExtra(AutoFocus, true);
         boolean useFlash = getIntent().getBooleanExtra(UseFlash, false);
 
         // Check for the camera permission before accessing the camera.  If the
@@ -108,20 +102,12 @@ public class ReaderActivity extends AppCompatActivity {
                 .show();
     }
 
-    @OnClick(R.id.capture_text)
-    void captureText(){
-        //TODO: get text from layout
-        Intent intent = new Intent();
-        intent.putExtra(Constants.EXTRA_TEXT, "Captured text");
-        setResult(Activity.RESULT_OK, intent);
-        finish();
-    }
-
     /**
      * Handles the requesting of the camera permission.  This includes
      * showing a "Snackbar" message of why the permission is needed then
      * sending the request.
      */
+    //TODO: presunout do nejake helper tridy
     private void requestCameraPermission() {
         Log.w(TAG, "Camera permission is not granted. Requesting permission");
 
@@ -151,18 +137,19 @@ public class ReaderActivity extends AppCompatActivity {
 
     @Override
     public boolean onTouchEvent(MotionEvent e) {
-        boolean b = scaleGestureDetector.onTouchEvent(e);
+//        boolean b = scaleGestureDetector.onTouchEvent(e);
 
         boolean c = gestureDetector.onTouchEvent(e);
 
-        return b || c || super.onTouchEvent(e);
+        return c || super.onTouchEvent(e);
+//        return b || c || super.onTouchEvent(e);
     }
 
     /**
      * Creates and starts the camera.  Note that this uses a higher resolution in comparison
      * to other detection examples to enable the ocr detector to detect small text samples
      * at long distances.
-     *
+     * <p>
      * Suppressing InlinedApi since there is a check that the minimum version is met before using
      * the constant.
      */
@@ -241,6 +228,7 @@ public class ReaderActivity extends AppCompatActivity {
         if (mPreview != null) {
             mPreview.release();
         }
+        unbinder.unbind();
     }
 
     /**
@@ -272,7 +260,8 @@ public class ReaderActivity extends AppCompatActivity {
         if (grantResults.length != 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             Log.d(TAG, "Camera permission granted - initialize the camera source");
             // We have permission, so create the camerasource
-            boolean autoFocus = getIntent().getBooleanExtra(AutoFocus,false);
+            //TODO: autofocus, flash
+            boolean autoFocus = getIntent().getBooleanExtra(AutoFocus, false);
             boolean useFlash = getIntent().getBooleanExtra(UseFlash, false);
             createCameraSource(autoFocus, useFlash);
             return;
@@ -335,16 +324,14 @@ public class ReaderActivity extends AppCompatActivity {
             text = graphic.getTextBlock();
             if (text != null && text.getValue() != null) {
                 Intent data = new Intent();
-                data.putExtra(TextBlockObject, text.getValue());
-                setResult(CommonStatusCodes.SUCCESS, data);
+                data.putExtra(Constants.EXTRA_TEXT, text.getValue());
+                setResult(RESULT_OK, data);
                 finish();
-            }
-            else {
+            } else {
                 Log.d(TAG, "text data is null");
             }
-        }
-        else {
-            Log.d(TAG,"no text detected");
+        } else {
+            Log.d(TAG, "no text detected");
         }
         return text != null;
     }
