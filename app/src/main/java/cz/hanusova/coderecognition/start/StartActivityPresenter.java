@@ -19,7 +19,7 @@ public class StartActivityPresenter implements BasePresenter<StartActivityView>{
         this.view = null;
     }
 
-    public void recognizeCodes(){
-        //TODO: tady pridej algoritmy pro rozpoznavani sifer. Potom to muzeme refactorovat :)
+    public String getText(){
+        return "Hello, I'm your presenter!";
     }
 }

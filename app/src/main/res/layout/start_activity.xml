@@ -9,4 +9,10 @@
         android:layout_height="wrap_content"
         android:text="Tady bude oscanovany text"/>
 
+    <Button
+        android:id="@+id/start_scan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Načti text"/>
+
 </LinearLayout>
